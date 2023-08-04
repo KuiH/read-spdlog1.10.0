@@ -203,7 +203,7 @@ using level_t = std::atomic<int>;
 #define SPDLOG_LEVEL_OFF 6
 
 #if !defined(SPDLOG_ACTIVE_LEVEL)
-#    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
+#    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO // 默认级别为info
 #endif
 
 // Log level enum
@@ -217,9 +217,10 @@ enum level_enum : int
     err = SPDLOG_LEVEL_ERROR,
     critical = SPDLOG_LEVEL_CRITICAL,
     off = SPDLOG_LEVEL_OFF,
-    n_levels
+    n_levels // 666有点巧妙
 };
 
+// 第二个参数是内存占用
 #define SPDLOG_LEVEL_NAME_TRACE spdlog::string_view_t("trace", 5)
 #define SPDLOG_LEVEL_NAME_DEBUG spdlog::string_view_t("debug", 5)
 #define SPDLOG_LEVEL_NAME_INFO spdlog::string_view_t("info", 4)
@@ -244,8 +245,12 @@ enum level_enum : int
         }
 #endif
 
+// 根据level_string_views表和level获取level的字符串值。level_string_views表由SPDLOG_LEVEL_NAMES初始化
 SPDLOG_API const string_view_t &to_string_view(spdlog::level::level_enum l) SPDLOG_NOEXCEPT;
+
 SPDLOG_API const char *to_short_c_str(spdlog::level::level_enum l) SPDLOG_NOEXCEPT;
+
+// 根据字符串值获取level。遍历一下level_string_views表就行
 SPDLOG_API spdlog::level::level_enum from_str(const std::string &name) SPDLOG_NOEXCEPT;
 
 } // namespace level
@@ -331,7 +336,7 @@ template<bool B, class T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
 
 template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args &&... args)
+std::unique_ptr<T> make_unique(Args &&...args)
 {
     static_assert(!std::is_array<T>::value, "arrays not supported");
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));

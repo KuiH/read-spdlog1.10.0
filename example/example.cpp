@@ -21,7 +21,7 @@ void multi_sink_example();
 void user_defined_example();
 void err_handler_example();
 void syslog_example();
-void udp_example();
+// void udp_example();  //注释掉这个函数，因为在我电脑上编译不过
 void custom_flags_example();
 void file_events_example();
 void replace_default_logger_example();
@@ -35,6 +35,7 @@ int main(int, char *[])
     // Log levels can be loaded from argv/env using "SPDLOG_LEVEL"
     load_levels_example();
 
+    // spdlog::[info/warn/...]使用的是默认的logger作为输出
     spdlog::info("Welcome to spdlog version {}.{}.{}  !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
 
     spdlog::warn("Easy padding in numbers like {:08d}", 12);
@@ -44,7 +45,7 @@ int main(int, char *[])
     spdlog::info("{:>8} aligned, {:<8} aligned", "right", "left");
 
     // Runtime log levels
-    spdlog::set_level(spdlog::level::info); // Set global log level to info
+    spdlog::set_level(spdlog::level::info);  // Set global log level to info
     spdlog::debug("This message should not be displayed!");
     spdlog::set_level(spdlog::level::trace); // Set specific logger's log level
     spdlog::debug("This message should be displayed..");
@@ -80,7 +81,7 @@ int main(int, char *[])
         err_handler_example();
         trace_example();
         stopwatch_example();
-        udp_example();
+        // udp_example();
         custom_flags_example();
         file_events_example();
         replace_default_logger_example();
@@ -229,14 +230,14 @@ void stopwatch_example()
     spdlog::info("Stopwatch: {} seconds", sw);
 }
 
-#include "spdlog/sinks/udp_sink.h"
-void udp_example()
-{
-    spdlog::sinks::udp_sink_config cfg("127.0.0.1", 11091);
-    auto my_logger = spdlog::udp_logger_mt("udplog", cfg);
-    my_logger->set_level(spdlog::level::debug);
-    my_logger->info("hello world");
-}
+// #include "spdlog/sinks/udp_sink.h"
+// void udp_example()
+// {
+//     spdlog::sinks::udp_sink_config cfg("127.0.0.1", 11091);
+//     auto my_logger = spdlog::udp_logger_mt("udplog", cfg);
+//     my_logger->set_level(spdlog::level::debug);
+//     my_logger->info("hello world");
+// }
 
 // A logger with multiple sinks (stdout and file) - each with a different format and log level.
 void multi_sink_example()
