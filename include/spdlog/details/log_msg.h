@@ -10,6 +10,7 @@ namespace spdlog {
 namespace details {
 struct SPDLOG_API log_msg
 {
+    // = default要求编译器启用这些构造函数
     log_msg() = default;
     log_msg(log_clock::time_point log_time, source_loc loc, string_view_t logger_name, level::level_enum lvl, string_view_t msg);
     log_msg(source_loc loc, string_view_t logger_name, level::level_enum lvl, string_view_t msg);
@@ -19,15 +20,15 @@ struct SPDLOG_API log_msg
 
     string_view_t logger_name;
     level::level_enum level{level::off};
-    log_clock::time_point time;
+    log_clock::time_point time; // using log_clock = std::chrono::system_clock; time_point表示一个时间点。默认为当前时间
     size_t thread_id{0};
 
     // wrapping the formatted text with color (updated by pattern_formatter).
     mutable size_t color_range_start{0};
     mutable size_t color_range_end{0};
 
-    source_loc source;
-    string_view_t payload;
+    source_loc source;     // 默认值为source_loc的默认构造
+    string_view_t payload; // 存储的是msg
 };
 } // namespace details
 } // namespace spdlog

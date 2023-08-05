@@ -294,13 +294,16 @@ private:
 
 struct source_loc
 {
-    SPDLOG_CONSTEXPR source_loc() = default;
+    // constexpr构造函数，把这个类变为一个"字面值常量类"https://blog.csdn.net/craftsman1970/article/details/80244873
+    // constexpr构造函数的函数体一般为空，使用初始化列表或者其他的constexpr构造函数初始化所有数据成员
+    SPDLOG_CONSTEXPR source_loc() = default; // 启用默认的构造函数
     SPDLOG_CONSTEXPR source_loc(const char *filename_in, int line_in, const char *funcname_in)
         : filename{filename_in}
         , line{line_in}
         , funcname{funcname_in}
     {}
 
+    // constexpr修饰其它函数，将运算尽量放在编译阶段。函数只能有一个return语句
     SPDLOG_CONSTEXPR bool empty() const SPDLOG_NOEXCEPT
     {
         return line == 0;
