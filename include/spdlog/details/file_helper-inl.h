@@ -31,9 +31,11 @@ SPDLOG_INLINE file_helper::~file_helper()
 
 SPDLOG_INLINE void file_helper::open(const filename_t &fname, bool truncate)
 {
-    close();
+    close(); // q:这里调用close不是会触发file_event_handlers的操作吗？
     filename_ = fname;
 
+    // a: 追加. b: 二进制. w: 打开用于写入的空文件。 如果给定文件存在，则其内容会被销毁。
+    // 类似python的文件
     auto *mode = SPDLOG_FILENAME_T("ab");
     auto *trunc_mode = SPDLOG_FILENAME_T("wb");
 
@@ -41,6 +43,7 @@ SPDLOG_INLINE void file_helper::open(const filename_t &fname, bool truncate)
     {
         event_handlers_.before_open(filename_);
     }
+    // 重复尝试打开文件
     for (int tries = 0; tries < open_tries_; ++tries)
     {
         // create containing folder if not exists already.
@@ -113,6 +116,12 @@ SPDLOG_INLINE void file_helper::write(const memory_buf_t &buf)
 {
     size_t msg_size = buf.size();
     auto data = buf.data();
+    // std::size_t fwrite( const void* buffer, std::size_t size, std::size_t count, std::FILE* stream );
+    /*
+    buffer	-	指向数组中要被写入的首个对象的指针
+    size	-	每个对象的大小
+    count	-	要被写入的对象数
+    */
     if (std::fwrite(data, 1, msg_size, fd_) != msg_size)
     {
         throw_spdlog_ex("Failed writing to file " + os::filename_to_str(filename_), errno);

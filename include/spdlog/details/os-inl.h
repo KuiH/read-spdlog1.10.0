@@ -37,7 +37,7 @@
 
 #    include <direct.h> // for _mkdir/_wmkdir
 
-#else // unix
+#else                   // unix
 
 #    include <fcntl.h>
 #    include <unistd.h>
@@ -58,7 +58,7 @@
 #        include <thread.h> // for thr_self
 #    endif
 
-#endif // unix
+#endif                         // unix
 
 #ifndef __has_feature          // Clang - feature checking macros.
 #    define __has_feature(x) 0 // Compatibility with non-clang compilers.
@@ -122,6 +122,7 @@ SPDLOG_INLINE std::tm gmtime() SPDLOG_NOEXCEPT
 // fopen_s on non windows for writing
 SPDLOG_INLINE bool fopen_s(FILE **fp, const filename_t &filename, const filename_t &mode)
 {
+    //_fsopen以流的形式打开由 filename 指定的文件并使该文件做好准备以进行后续的共享读写
 #ifdef _WIN32
 #    ifdef SPDLOG_WCHAR_FILENAMES
     *fp = ::_wfsopen((filename.c_str()), mode.c_str(), _SH_DENYNO);

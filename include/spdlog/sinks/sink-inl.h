@@ -11,6 +11,7 @@
 
 SPDLOG_INLINE bool spdlog::sinks::sink::should_log(spdlog::level::level_enum msg_level) const
 {
+    // std::memory_order_relaxed: 仅仅保证load()和store()是原子操作，除此之外，不提供任何跨线程的同步
     return msg_level >= level_.load(std::memory_order_relaxed);
 }
 

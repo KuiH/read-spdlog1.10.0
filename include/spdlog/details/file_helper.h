@@ -25,7 +25,7 @@ public:
 
     void open(const filename_t &fname, bool truncate = false);
     void reopen(bool truncate);
-    void flush();
+    void flush(); // 主动将缓冲区的内容写入文件
     void close();
     void write(const memory_buf_t &buf);
     size_t size() const;
@@ -44,6 +44,7 @@ public:
     // ".mylog" => (".mylog". "")
     // "my_folder/.mylog" => ("my_folder/.mylog", "")
     // "my_folder/.mylog.txt" => ("my_folder/.mylog", ".txt")
+    // 这种与个体无关的函数，可以用static
     static std::tuple<filename_t, filename_t> split_by_extension(const filename_t &fname);
 
 private:

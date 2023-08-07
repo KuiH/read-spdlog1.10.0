@@ -19,12 +19,12 @@ public:
     virtual void set_formatter(std::unique_ptr<spdlog::formatter> sink_formatter) = 0;
 
     void set_level(level::level_enum log_level);
-    level::level_enum level() const;
+    level::level_enum level() const; // 获取level_
     bool should_log(level::level_enum msg_level) const;
 
 protected:
     // sink log level - default is all
-    level_t level_{level::trace};
+    level_t level_{level::trace}; // using level_t = std::atomic<int>;
 };
 
 } // namespace sinks

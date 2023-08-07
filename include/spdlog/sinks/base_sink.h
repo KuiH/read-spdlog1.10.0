@@ -20,6 +20,7 @@ class SPDLOG_API base_sink : public sink
 {
 public:
     base_sink();
+    // explicit禁止构造函数被用于隐式转换
     explicit base_sink(std::unique_ptr<spdlog::formatter> formatter);
     ~base_sink() override = default;
 
@@ -29,6 +30,8 @@ public:
     base_sink &operator=(const base_sink &) = delete;
     base_sink &operator=(base_sink &&) = delete;
 
+    // 下面这几个是继承来的纯虚函数。final阻止了这些虚函数被子类重载
+    // 继承来的4个虚函数加锁地调用protected里面的4个函数
     void log(const details::log_msg &msg) final;
     void flush() final;
     void set_pattern(const std::string &pattern) final;

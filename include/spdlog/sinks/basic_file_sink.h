@@ -38,11 +38,13 @@ using basic_file_sink_st = basic_file_sink<details::null_mutex>;
 
 //
 // factory functions
+// 构造含有对应sink的logger
 //
 template<typename Factory = spdlog::synchronous_factory>
 inline std::shared_ptr<logger> basic_logger_mt(
     const std::string &logger_name, const filename_t &filename, bool truncate = false, const file_event_handlers &event_handlers = {})
 {
+    // create是个模板函数。调用时推荐加上template
     return Factory::template create<sinks::basic_file_sink_mt>(logger_name, filename, truncate, event_handlers);
 }
 
