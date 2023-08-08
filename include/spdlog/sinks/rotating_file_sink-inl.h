@@ -60,6 +60,7 @@ SPDLOG_INLINE filename_t rotating_file_sink<Mutex>::calc_filename(const filename
     }
 
     filename_t basename, ext;
+    // std::tie可以将结果整合成一个tuple
     std::tie(basename, ext) = details::file_helper::split_by_extension(filename);
     return fmt_lib::format(SPDLOG_FILENAME_T("{}.{}{}"), basename, index, ext);
 }
