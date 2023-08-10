@@ -24,6 +24,7 @@ struct SPDLOG_API log_msg
     size_t thread_id{0};
 
     // wrapping the formatted text with color (updated by pattern_formatter).
+    // const修饰的函数中，mutable修饰的成员数据可以发生改变
     mutable size_t color_range_start{0};
     mutable size_t color_range_end{0};
 

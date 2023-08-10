@@ -46,7 +46,7 @@ SPDLOG_INLINE void ansicolor_sink<ConsoleMutex>::log(const details::log_msg &msg
     msg.color_range_start = 0;
     msg.color_range_end = 0;
     memory_buf_t formatted;
-    formatter_->format(msg, formatted);
+    formatter_->format(msg, formatted); // format的同时会更新msg.color_range_start和msg.color_range_end
     if (should_do_colors_ && msg.color_range_end > msg.color_range_start)
     {
         // before color range
@@ -130,6 +130,7 @@ SPDLOG_INLINE std::string ansicolor_sink<ConsoleMutex>::to_string_(const string_
 }
 
 // ansicolor_stdout_sink
+// stdout/stdin/stderr这三个宏可以当成std::FILE*使用
 template<typename ConsoleMutex>
 SPDLOG_INLINE ansicolor_stdout_sink<ConsoleMutex>::ansicolor_stdout_sink(color_mode mode)
     : ansicolor_sink<ConsoleMutex>(stdout, mode)

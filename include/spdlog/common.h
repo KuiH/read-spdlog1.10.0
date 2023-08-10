@@ -261,7 +261,7 @@ SPDLOG_API spdlog::level::level_enum from_str(const std::string &name) SPDLOG_NO
 enum class color_mode
 {
     always,
-    automatic,
+    automatic, // 如果输出到控制台，并且控制台支持颜色的话就用颜色，否则不用
     never
 };
 

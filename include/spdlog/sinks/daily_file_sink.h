@@ -28,6 +28,7 @@ namespace sinks {
 struct daily_filename_calculator
 {
     // Create filename for the form basename.YYYY-MM-DD
+    // tm 是标准库的内容
     static filename_t calc_filename(const filename_t &filename, const tm &now_tm)
     {
         filename_t basename, ext;
@@ -134,6 +135,7 @@ public:
         auto now = log_clock::now();
         auto filename = FileNameCalc::calc_filename(base_filename_, now_tm(now));
         file_helper_.open(filename, truncate_);
+        // tp：timepoint
         rotation_tp_ = next_rotation_tp_();
 
         if (max_files_ > 0)
@@ -183,6 +185,7 @@ private:
         filenames_q_ = details::circular_q<filename_t>(static_cast<size_t>(max_files_));
         std::vector<filename_t> filenames;
         auto now = log_clock::now();
+        // 从现在一直往前，直到文件不存在
         while (filenames.size() < max_files_)
         {
             auto filename = FileNameCalc::calc_filename(base_filename_, now_tm(now));
@@ -193,35 +196,42 @@ private:
             filenames.emplace_back(filename);
             now -= std::chrono::hours(24);
         }
+        // 越年轻的文件在队列越后
         for (auto iter = filenames.rbegin(); iter != filenames.rend(); ++iter)
         {
             filenames_q_.push_back(std::move(*iter));
         }
     }
 
+    // 将tp转为当前时区的时间
     tm now_tm(log_clock::time_point tp)
     {
         time_t tnow = log_clock::to_time_t(tp);
         return spdlog::details::os::localtime(tnow);
     }
 
+    // 下一个文件名上的时间
     log_clock::time_point next_rotation_tp_()
     {
         auto now = log_clock::now();
         tm date = now_tm(now);
+        // 设置时分秒，不设置天。说明构造函数中的rotation_h_和rotation_m_默认是当天的小时和分钟
         date.tm_hour = rotation_h_;
         date.tm_min = rotation_m_;
         date.tm_sec = 0;
+        // mktime: tm -> time_t
+        // from_time_t: time_t -> chrono::time_point
         auto rotation_time = log_clock::from_time_t(std::mktime(&date));
         if (rotation_time > now)
         {
             return rotation_time;
         }
-        return {rotation_time + std::chrono::hours(24)};
+        return {rotation_time + std::chrono::hours(24)}; // 下一天
     }
 
     // Delete the file N rotations ago.
     // Throw spdlog_ex on failure to delete the old file.
+    // 最老的删除，最新的加入队列
     void delete_old_()
     {
         using details::os::filename_to_str;
@@ -249,7 +259,7 @@ private:
     details::file_helper file_helper_;
     bool truncate_;
     uint16_t max_files_;
-    details::circular_q<filename_t> filenames_q_;
+    details::circular_q<filename_t> filenames_q_; // 文件名的循环队列。越年轻的文件名在队列越后
 };
 
 using daily_file_sink_mt = daily_file_sink<std::mutex>;

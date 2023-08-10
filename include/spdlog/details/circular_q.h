@@ -9,6 +9,7 @@
 
 namespace spdlog {
 namespace details {
+// 循环队列
 template<typename T>
 class circular_q
 {

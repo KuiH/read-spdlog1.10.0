@@ -37,7 +37,7 @@ private:
     // log.1.txt -> log.2.txt
     // log.2.txt -> log.3.txt
     // log.3.txt -> delete
-    // 通过重命名的方式将已经存在的文件编号+1，最早创建的文件(编号最大的)删除
+    // 通过重命名的方式将已经存在的文件编号+1，最早创建的文件(编号最大的)删除。Rotate之后index=0的文件会被清空
     void rotate_();
 
     // delete the target if exists, and rename the src file  to target

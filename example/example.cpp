@@ -239,6 +239,7 @@ void stopwatch_example()
 //     my_logger->info("hello world");
 // }
 
+#include "spdlog/sinks/ansicolor_sink.h"
 // A logger with multiple sinks (stdout and file) - each with a different format and log level.
 void multi_sink_example()
 {
