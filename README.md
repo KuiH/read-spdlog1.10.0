@@ -6,7 +6,7 @@ spdlog1.10.0源码阅读
 ## TODO
 
 - [x] log_msg
-- [ ] sink
+- [x] sink
 - [ ] registry
 - [ ] 异步文件
 - [ ] 异常
