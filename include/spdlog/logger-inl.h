@@ -36,6 +36,9 @@ SPDLOG_INLINE logger::logger(logger &&other) SPDLOG_NOEXCEPT : name_(std::move(o
 
 SPDLOG_INLINE logger &logger::operator=(logger other) SPDLOG_NOEXCEPT
 {
+    // 虽然swap是引用传递，但是这里operator=的other是值传递的，因此最终也不会改变原先other的值。
+    //=的语义是复制，等号右侧的内容不应该被改变，所以传入logger& 理应是可以的。但是这里调用的swap
+    // 函数，导致只能传值，不能传引用。应该是为了方便的写法。但是个人觉得这样写有失偏颇。
     this->swap(other);
     return *this;
 }

@@ -73,6 +73,9 @@ public:
     {}
 
     // Logger with sinks init list
+    // using sinks_init_list = std::initializer_list<sink_ptr>;
+    // std::initializer_list的内部并不负责保存初始化列表中元素的拷贝，仅仅存储了列表中元素的引用。同时，它提供了一些迭代器等
+    // std::initializer_list使得函数实参可以传递列表初始化: {a,b,c,...}
     logger(std::string name, sinks_init_list sinks)
         : logger(std::move(name), sinks.begin(), sinks.end())
     {}
@@ -87,6 +90,7 @@ public:
     template<typename... Args>
     void log(source_loc loc, level::level_enum lvl, format_string_t<Args...> fmt, Args &&...args)
     {
+        // 含有fmt的，调用log_
         log_(loc, lvl, fmt, std::forward<Args>(args)...);
     }
 
@@ -103,6 +107,7 @@ public:
     }
 
     // T cannot be statically converted to format string (including string_view/wstring_view)
+    // 如果T不是string_view_t，则调用这个函数
     template<class T, typename std::enable_if<!is_convertible_to_any_format_string<const T &>::value, int>::type = 0>
     void log(source_loc loc, level::level_enum lvl, const T &msg)
     {
@@ -122,6 +127,7 @@ public:
         log_it_(log_msg, log_enabled, traceback_enabled);
     }
 
+    // 特化一个msg是string_view_t的版本
     void log(source_loc loc, level::level_enum lvl, string_view_t msg)
     {
         bool log_enabled = should_log(lvl);
