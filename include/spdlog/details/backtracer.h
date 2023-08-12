@@ -17,6 +17,7 @@ namespace spdlog {
 namespace details {
 class SPDLOG_API backtracer
 {
+    // 加上mutable, 就允许变量在const函数中被更改。解决了语义const和语法const不一致的问题
     mutable std::mutex mutex_;
     std::atomic<bool> enabled_{false};
     circular_q<log_msg_buffer> messages_;

@@ -71,20 +71,20 @@ int main(int, char *[])
     {
         stdout_logger_example();
         basic_example();
-        rotating_example();
-        daily_example();
-        async_example();
-        binary_example();
-        vector_example();
-        multi_sink_example();
-        user_defined_example();
-        err_handler_example();
-        trace_example();
-        stopwatch_example();
+        // rotating_example();
+        // daily_example();
+        // async_example();
+        // binary_example();
+        // vector_example();
+        // multi_sink_example();
+        // user_defined_example();
+        // err_handler_example();
+        // trace_example();
+        // stopwatch_example();
         // udp_example();
-        custom_flags_example();
-        file_events_example();
-        replace_default_logger_example();
+        // custom_flags_example();
+        // file_events_example();
+        // replace_default_logger_example();
 
         // Flush all *registered* loggers using a worker thread every 3 seconds.
         // note: registered loggers *must* be thread safe for this to work correctly!
