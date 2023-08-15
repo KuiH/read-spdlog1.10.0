@@ -7,7 +7,7 @@ spdlog1.10.0源码阅读
 
 - [x] log_msg
 - [x] sink
-- [ ] logger
+- [x] logger
 - [ ] registry
 - [ ] 异步文件
 - [ ] 异常
