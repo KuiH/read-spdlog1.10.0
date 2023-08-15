@@ -159,7 +159,7 @@ protected:
         {
             auto filename = FileNameCalc::calc_filename(base_filename_, now_tm(time));
             file_helper_.open(filename, truncate_);
-            rotation_tp_ = next_rotation_tp_();
+            rotation_tp_ = next_rotation_tp_(); // 下一个文件名上的时间
         }
         memory_buf_t formatted;
         base_sink<Mutex>::formatter_->format(msg, formatted);

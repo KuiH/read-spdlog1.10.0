@@ -27,10 +27,10 @@ public:
     ~periodic_worker();
 
 private:
-    bool active_;
-    std::thread worker_thread_;
-    std::mutex mutex_;
-    std::condition_variable cv_;
+    bool active_;                // 该worker是否工作
+    std::thread worker_thread_;  // 工作线程
+    std::mutex mutex_;           // 互斥量
+    std::condition_variable cv_; // 同步量
 };
 } // namespace details
 } // namespace spdlog

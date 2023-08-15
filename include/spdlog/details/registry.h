@@ -27,6 +27,7 @@ class periodic_worker;
 class SPDLOG_API registry
 {
 public:
+    // logger_name ---> level_enum
     using log_levels = std::unordered_map<std::string, level::level_enum>;
     registry(const registry &) = delete;
     registry &operator=(const registry &) = delete;
@@ -61,6 +62,7 @@ public:
 
     void flush_on(level::level_enum log_level);
 
+    // 指定间隔时间flush一遍
     void flush_every(std::chrono::seconds interval);
 
     void set_error_handler(err_handler handler);
@@ -91,8 +93,9 @@ private:
 
     void throw_if_exists_(const std::string &logger_name);
     void register_logger_(std::shared_ptr<logger> new_logger);
-    bool set_level_from_cfg_(logger *logger);
+    bool set_level_from_cfg_(logger *logger); // 这玩意的实现怎么不见了? 可能是准备实现...
     std::mutex logger_map_mutex_, flusher_mutex_;
+    // std::recursive_mutex允许同一个线程多次获取该互斥锁，可以用来解决同一线程需要多次获取互斥量时死锁的问题
     std::recursive_mutex tp_mutex_;
     std::unordered_map<std::string, std::shared_ptr<logger>> loggers_;
     log_levels log_levels_;
@@ -103,7 +106,7 @@ private:
     std::shared_ptr<thread_pool> tp_;
     std::unique_ptr<periodic_worker> periodic_flusher_;
     std::shared_ptr<logger> default_logger_;
-    bool automatic_registration_ = true;
+    bool automatic_registration_ = true; // 是否在initialize_logger函数中自动注册logger
     size_t backtrace_n_messages_ = 0;
 };
 

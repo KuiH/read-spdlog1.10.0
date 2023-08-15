@@ -191,7 +191,7 @@ SPDLOG_INLINE void registry::flush_on(level::level_enum log_level)
 SPDLOG_INLINE void registry::flush_every(std::chrono::seconds interval)
 {
     std::lock_guard<std::mutex> lock(flusher_mutex_);
-    auto clbk = [this]() { this->flush_all(); };
+    auto clbk = [this]() { this->flush_all(); }; // call back
     periodic_flusher_ = details::make_unique<periodic_worker>(clbk, interval);
 }
 
@@ -227,9 +227,10 @@ SPDLOG_INLINE void registry::drop(const std::string &logger_name)
 {
     std::lock_guard<std::mutex> lock(logger_map_mutex_);
     loggers_.erase(logger_name);
+    // 删除的是默认logger，还需要将default_logger_成员清除。
     if (default_logger_ && default_logger_->name() == logger_name)
     {
-        default_logger_.reset();
+        default_logger_.reset(); // shared_ptr的reset，释放被管理对象的所有权。其引用计数会减1
     }
 }
 
