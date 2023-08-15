@@ -14,6 +14,7 @@ template<typename T>
 class circular_q
 {
     size_t max_items_ = 0;
+    // size_type是一种类型，确保能够保存可能存在的最大向量中的所有元素
     typename std::vector<T>::size_type head_ = 0;
     typename std::vector<T>::size_type tail_ = 0;
     size_t overrun_counter_ = 0;
@@ -49,12 +50,15 @@ public:
     // push back, overrun (oldest) item if no room left
     void push_back(T &&item)
     {
+        // 0,1,2,3,4
+        // t
+        //   h
         if (max_items_ > 0)
         {
             v_[tail_] = std::move(item);
             tail_ = (tail_ + 1) % max_items_;
 
-            if (tail_ == head_) // overrun last item if full
+            if (tail_ == head_) // overrun last item if full. pop时做的是逻辑删除，移动head的位置，因此head不一定最多比tail大1
             {
                 head_ = (head_ + 1) % max_items_;
                 ++overrun_counter_;
@@ -83,12 +87,14 @@ public:
         }
         else
         {
+            // 因为pop时做的是逻辑删除，所以要这步
             return max_items_ - (head_ - tail_);
         }
     }
 
     // Return const reference to item by index.
     // If index is out of range 0…size()-1, the behavior is undefined.
+    // 队头视为0
     const T &at(size_t i) const
     {
         assert(i < size());
@@ -97,6 +103,7 @@ public:
 
     // Pop item from front.
     // If there are no elements in the container, the behavior is undefined.
+    // 逻辑删除
     void pop_front()
     {
         head_ = (head_ + 1) % max_items_;

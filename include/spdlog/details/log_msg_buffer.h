@@ -10,7 +10,7 @@ namespace details {
 
 // Extend log_msg with internal buffer to store its payload.
 // This is needed since log_msg holds string_views that points to stack data.
-// 看注释和源码，似乎是希望把payload和log_name整到堆上
+// 看注释和源码，似乎是希望把payload和logger_name整到堆上
 class SPDLOG_API log_msg_buffer : public log_msg
 {
     memory_buf_t buffer;
