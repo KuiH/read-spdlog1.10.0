@@ -26,7 +26,7 @@ SPDLOG_INLINE spdlog::async_logger::async_logger(
 // send the log message to the thread pool
 SPDLOG_INLINE void spdlog::async_logger::sink_it_(const details::log_msg &msg)
 {
-    if (auto pool_ptr = thread_pool_.lock())
+    if (auto pool_ptr = thread_pool_.lock()) // lock：将weak_ptr变为shared_ptr，从而调用->等运算符
     {
         pool_ptr->post_log(shared_from_this(), msg, overflow_policy_);
     }

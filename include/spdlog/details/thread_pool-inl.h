@@ -106,6 +106,8 @@ bool SPDLOG_INLINE thread_pool::process_next_msg_()
     bool dequeued = q_.dequeue_for(incoming_async_msg, std::chrono::seconds(10));
     if (!dequeued)
     {
+        // 目前队列是空，因此dequeued返回false。但是可以等待下一条消息入队，所以这里返回true
+        // 如果返回false的话，worker_loop_循环就会终止了
         return true;
     }
 
