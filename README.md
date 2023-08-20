@@ -9,5 +9,5 @@ spdlog1.10.0源码阅读
 - [x] sink
 - [x] logger
 - [x] registry
-- [ ] 异步logger
+- [x] 异步logger
 - [ ] 异常

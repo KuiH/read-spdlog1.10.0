@@ -289,6 +289,9 @@ private:
     std::string msg_;
 };
 
+//[[noreturn]]主要用来标志当前函数不会返回，需要注意的是其更大的意义在于标注，表明在当前函数调用之后的函数或代码并不会被执行。
+// 方便读者理解和编译器优化
+// 参考https://blog.csdn.net/qq_44491831/article/details/126709740
 [[noreturn]] SPDLOG_API void throw_spdlog_ex(const std::string &msg, int last_errno);
 [[noreturn]] SPDLOG_API void throw_spdlog_ex(std::string msg);
 
