@@ -10,4 +10,4 @@ spdlog1.10.0源码阅读
 - [x] logger
 - [x] registry
 - [x] 异步logger
-- [ ] 异常
+- [x] 异常
